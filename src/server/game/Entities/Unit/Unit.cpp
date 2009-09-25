@@ -1631,7 +1631,7 @@ uint32 Unit::CalcArmorReducedDamage(Unit* pVictim, const uint32 damage, SpellEnt
     return (newdamage > 1) ? newdamage : 1;
 }
 
-void Unit::CalcAbsorbResist(Unit* victim, SpellSchoolMask schoolMask, DamageEffectType damagetype, uint32 const damage, uint32* absorb, uint32* resist, SpellInfo const* spellInfo)
+void Unit::CalcAbsorbResist(Unit *pVictim, SpellSchoolMask schoolMask, DamageEffectType damagetype, const uint32 damage, uint32 *absorb, uint32 *resist, SpellEntry const *spellInfo)
 {
     if (!pVictim || !pVictim->isAlive() || !damage)
         return;
@@ -1641,7 +1641,7 @@ void Unit::CalcAbsorbResist(Unit* victim, SpellSchoolMask schoolMask, DamageEffe
     // Magic damage, check for resists
     if ((schoolMask & SPELL_SCHOOL_MASK_NORMAL) == 0)
     {
-        float victimResistance = float(victim->GetResistance(GetFirstSchoolInMask(schoolMask)));
+        float victimResistance = float(pVictim->GetResistance(GetFirstSchoolInMask(schoolMask)));
         victimResistance += float(GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_TARGET_RESISTANCE, schoolMask));
         if (Player* player = ToPlayer())
 			victimResistance -= float(player->GetSpellPenetrationItemMod());
@@ -7665,7 +7665,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 // Guard Dog
                 case 201:
                 {
-					if (!victim)
+					if (!pVictim)
 						return false;
 						
                     triggered_spell_id = 54445;
