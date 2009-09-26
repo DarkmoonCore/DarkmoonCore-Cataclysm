@@ -1602,7 +1602,7 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const
 			if (roll_chance_i(10))
 				{
    					crit = true;
-					damage = caster->SpellCriticalHealingBonus(m_spellInfo, damage, target);
+					damage = caster->SpellCriticalHealingBonus(m_spellProto, damage, target);
 				}
 
             // Calculate armor mitigation
@@ -1805,7 +1805,7 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const
 			if (roll_chance_i(10))
 				{
    					crit = true;
-					damage = caster->SpellCriticalHealingBonus(m_spellInfo, damage, target);
+					damage = caster->SpellCriticalHealingBonus(m_spellProto, damage, target);
 				}
 
             sLog->outDetail("PeriodicTick: %u (TypeId: %u) heal of %u (TypeId: %u) for %u health inflicted by %u",
