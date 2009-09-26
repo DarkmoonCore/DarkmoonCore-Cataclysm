@@ -1523,9 +1523,13 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const
             else
                 damage = uint32(target->CountPctFromMaxHealth(damage));
 
-            bool crit = IsPeriodicTickCrit(target, caster);
-            if (crit)
-                damage = caster->SpellCriticalDamageBonus(m_spellProto, damage, target);
+            // bool crit = IsPeriodicTickCrit(target, caster);
+			bool crit = false;
+			if (roll_chance_i(10))
+				{
+   					crit = true;
+					damage = caster->SpellCriticalDamageBonus(m_spellProto, damage, target);
+				}
 
             int32 dmg = damage;
             caster->ApplyResilience(target, &dmg);
@@ -1593,9 +1597,13 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const
             uint32 damage = GetAmount() > 0 ? GetAmount() : 0;
             damage = caster->SpellDamageBonus(target, GetSpellProto(), GetEffIndex(), damage, DOT, GetBase()->GetStackAmount());
 
-            bool crit = IsPeriodicTickCrit(target, caster);
-            if (crit)
-                damage = caster->SpellCriticalDamageBonus(m_spellProto, damage, target);
+            // bool crit = IsPeriodicTickCrit(target, caster);
+			bool crit = false;
+			if (roll_chance_i(10))
+				{
+   					crit = true;
+					damage = caster->SpellCriticalHealingBonus(m_spellInfo, damage, target);
+				}
 
             // Calculate armor mitigation
             if (Unit::IsDamageReducedByArmor(GetSpellSchoolMask(GetSpellProto()), GetSpellProto(), m_effIndex))
@@ -1792,9 +1800,13 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const
                     break;
             }
 
-            bool crit = IsPeriodicTickCrit(target, caster);
-            if (crit)
-                damage = caster->SpellCriticalHealingBonus(m_spellProto, damage, target);
+            // bool crit = IsPeriodicTickCrit(target, caster);
+			bool crit = false;
+			if (roll_chance_i(10))
+				{
+   					crit = true;
+					damage = caster->SpellCriticalHealingBonus(m_spellInfo, damage, target);
+				}
 
             sLog->outDetail("PeriodicTick: %u (TypeId: %u) heal of %u (TypeId: %u) for %u health inflicted by %u",
                 GUID_LOPART(GetCasterGUID()), GuidHigh2TypeId(GUID_HIPART(GetCasterGUID())), target->GetGUIDLow(), target->GetTypeId(), damage, GetId());
