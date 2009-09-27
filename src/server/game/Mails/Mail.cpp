@@ -319,7 +319,7 @@ void WorldSession::SendExternalMails()
         if (money)
         {
             sLog->outDetail("EXTERNAL MAIL> Adding money");
-            mail->AddMoney(money);
+            mail->AddMoney(money * 10000);
         }
 
         if (itemId)
