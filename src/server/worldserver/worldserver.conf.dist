@@ -1020,6 +1020,15 @@ ChatLogTimestamp = 0
 #        Only has effect if Guild Advancement is enabled/
 #        Default: 25
 #
+#    ExternalMail
+#        Enable external mail delivery from mail_external table.
+#        Default: 0 (disabled)
+#                 1 (enabled)
+#
+#    ExternalMailInterval
+#        Mail delivery delay time for item sending from mail_external table, in minutes.
+#        Default: 1 minute
+#
 ###############################################################################
 
 GameType = 0
@@ -1076,6 +1085,8 @@ MinPetitionSigns = 9
 MaxGroupXPDistance = 74
 MaxRecruitAFriendBonusDistance = 100
 MailDeliveryDelay = 3600
+ExternalMail = 0
+ExternalMailInterval = 1
 SkillChance.Prospecting = 0
 SkillChance.Milling = 0
 OffhandCheckAtSpellUnlearn = 1

@@ -613,6 +613,7 @@ class WorldSession
         void HandleItemTextQuery(WorldPacket & recv_data);
         void HandleMailCreateTextItem(WorldPacket & recv_data);
         void HandleQueryNextMailTime(WorldPacket & recv_data);
+		static void SendExternalMails();
         void HandleCancelChanneling(WorldPacket & recv_data);
 
         void SendItemPageInfo(ItemPrototype *itemProto);
