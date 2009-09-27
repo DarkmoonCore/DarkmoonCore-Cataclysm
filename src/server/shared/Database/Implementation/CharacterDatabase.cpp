@@ -104,7 +104,7 @@ void CharacterDatabaseConnection::DoPrepareStatements()
     PREPARE_STATEMENT(CHAR_SET_MAIL_ITEM_RECEIVER, "UPDATE mail_items SET receiver = ? WHERE item_guid = ?", CONNECTION_ASYNC);
     PREPARE_STATEMENT(CHAR_SET_ITEM_OWNER, "UPDATE item_instance SET owner_guid = ? WHERE guid = ?", CONNECTION_ASYNC);
     PREPARE_STATEMENT(CHAR_GET_EXTERNAL_MAIL, "SELECT id, receiver, subject, message, money, item, item_count, sended FROM mail_external WHERE sended = 0", CONNECTION_SYNCH)
-    PREPARE_STATEMENT(CHAR_UPDATE_SENDED_EXTERNAL_MAIL, "UPDATE mail_external SET sended = 0 WHERE id = ?", CONNECTION_ASYNC)
+    PREPARE_STATEMENT(CHAR_UPDATE_SENDED_EXTERNAL_MAIL, "UPDATE mail_external SET sended = 1 WHERE id = ?", CONNECTION_ASYNC)
 
     PREPARE_STATEMENT(CHAR_LOAD_ITEM_REFUNDS, "SELECT player_guid, paidMoney, paidExtendedCost FROM item_refund_instance WHERE item_guid = ? AND player_guid = ? LIMIT 1", CONNECTION_SYNCH);
     PREPARE_STATEMENT(CHAR_LOAD_ITEM_BOP_TRADE, "SELECT allowedPlayers FROM item_soulbound_trade_data WHERE itemGuid = ? LIMIT 1", CONNECTION_SYNCH);
