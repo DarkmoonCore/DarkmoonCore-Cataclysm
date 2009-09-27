@@ -6706,6 +6706,17 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 case 20337: // rank 3
                     triggered_spell_id = 54499;
                     break;
+					// Long Arm of The law
+				case 87168:
+				case 87172:
+				{
+					if (!IsWithinDistInMap(pVictim, 15.0f))
+						{
+							target = this;
+							triggered_spell_id = 87173;
+							break;
+						}
+				}					
                 // Judgement of Light
                 case 20185:
                 {
