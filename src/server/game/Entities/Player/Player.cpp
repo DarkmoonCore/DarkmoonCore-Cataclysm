@@ -25431,7 +25431,9 @@ void Player::RemoveOrAddMasterySpells()
         if (HasAura(76857))
             RemoveAurasDueToSpell(76857);
         if (HasAura(77484))
-            RemoveAurasDueToSpell(77484);			
+            RemoveAurasDueToSpell(77484);
+        if (HasAura(77485))
+            RemoveAurasDueToSpell(77485);			
     }
     else if (HasAuraType(SPELL_AURA_MASTERY))
     {
@@ -25472,6 +25474,9 @@ void Player::RemoveOrAddMasterySpells()
                 AddAura(76857, this);
         if (GetTalentBranchSpec(GetActiveSpec()) == BS_PRIEST_DISCIPLINE)
             if (!HasAura(77484))
-                AddAura(77484, this);				
+                AddAura(77484, this);
+        if (GetTalentBranchSpec(GetActiveSpec()) == BS_PRIEST_DISCIPLINE)
+            if (!HasAura(77485))
+                AddAura(77485, this);					
     }
 }
