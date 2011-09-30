@@ -25475,7 +25475,7 @@ void Player::RemoveOrAddMasterySpells()
         if (GetTalentBranchSpec(GetActiveSpec()) == BS_PRIEST_DISCIPLINE)
             if (!HasAura(77484))
                 AddAura(77484, this);
-        if (GetTalentBranchSpec(GetActiveSpec()) == BS_PRIEST_DISCIPLINE)
+        if (GetTalentBranchSpec(GetActiveSpec()) == BS_PRIEST_HOLY)
             if (!HasAura(77485))
                 AddAura(77485, this);					
     }
