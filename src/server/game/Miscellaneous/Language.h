@@ -733,7 +733,8 @@ enum DarkmoonCoreStrings
     LANG_COMMAND_CREATURESTORAGE_NOTFOUND  = 818,
 
     LANG_CHANNEL_CITY                   = 819,
-    // Room for in-game strings           820-999 not used
+	LANG_ADDITEM_ITEMADDED              = 820,
+    // Room for in-game strings           821-999 not used
 
     // Level 4 (CLI only commands)
     LANG_COMMAND_EXIT                   = 1000,

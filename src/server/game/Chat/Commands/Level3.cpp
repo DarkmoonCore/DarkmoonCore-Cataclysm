@@ -621,8 +621,8 @@ bool ChatHandler::HandleAddItemCommand(const char *args)
         plTarget = pl;
 
     sLog->outDetail(GetDarkmoonCoreString(LANG_ADDITEM), itemId, count);
+	ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itemId);
 
-    ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itemId);
     if (!pProto)
     {
         PSendSysMessage(LANG_COMMAND_ITEMIDINVALID, itemId);
@@ -661,12 +661,15 @@ bool ChatHandler::HandleAddItemCommand(const char *args)
         for (ItemPosCountVec::const_iterator itr = dest.begin(); itr != dest.end(); ++itr)
             if (Item* item1 = pl->GetItemByPos(itr->pos))
                 item1->SetBinding(false);
+	Player *chr = getSelectedPlayer();
 
     if (count > 0 && item)
     {
         pl->SendNewItem(item, count, false, true);
         if (pl != plTarget)
             plTarget->SendNewItem(item, count, true, false);
+		PSendSysMessage(LANG_ADDITEM_ITEMADDED, GetNameLink(chr).c_str(), itemId);
+        return true;
     }
 
     if (noSpaceForCount > 0)
