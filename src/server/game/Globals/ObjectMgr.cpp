@@ -1946,6 +1946,36 @@ void ObjectMgr::RemoveGameobjectFromGrid(uint32 guid, GameObjectData const* data
     }
 }
 
+void ObjectMgr::LoadCreatureCurrencyDrop()
+{
+    uint32 count = 0;
+
+    QueryResult result = WorldDatabase.Query("SELECT entry, currency, count FROM creature_currency_drop");
+
+    if (!result)
+    {
+        sLog->outString();
+        sLog->outString(">>DARKMOONCORE: Loaded 0 creatures with currency drop.");
+        return;
+    }
+
+    do
+    {
+        Field *fields = result->Fetch();
+
+        uint32 currencyEntry	 = fields[0].GetUInt32();
+        uint64 currencyType		 = fields[1].GetUInt32();
+        uint32 currencyCount     = fields[2].GetUInt32();
+
+        CurrencyDropLocale& data = mCurrencyDropLocaleMap[currencyEntry];
+
+        ++count;
+    } while (result->NextRow());
+
+    sLog->outString();
+    sLog->outString(">>DARKMOONCORE: Loaded %lu creatures with currency drop.", (unsigned long)mCurrencyDropLocaleMap.size());
+}
+
 void ObjectMgr::LoadCreatureRespawnTimes()
 {
     uint32 count = 0;

@@ -383,6 +383,12 @@ struct DarkmoonCoreStringLocale
     StringVector Content;
 };
 
+struct CurrencyDropLocale
+{
+    StringVector currencyEntry;
+	StringVector currencyType;
+};
+
 typedef std::map<uint64, uint64> LinkedRespawnMap;
 typedef UNORDERED_MAP<uint32, CreatureData> CreatureDataMap;
 typedef UNORDERED_MAP<uint32, GameObjectData> GameObjectDataMap;
@@ -394,6 +400,7 @@ typedef UNORDERED_MAP<uint32, QuestLocale> QuestLocaleMap;
 typedef UNORDERED_MAP<uint32, NpcTextLocale> NpcTextLocaleMap;
 typedef UNORDERED_MAP<uint32, PageTextLocale> PageTextLocaleMap;
 typedef UNORDERED_MAP<int32, DarkmoonCoreStringLocale> DarkmoonCoreStringLocaleMap;
+typedef UNORDERED_MAP<int32, CurrencyDropLocale> CurrencyDropLocaleMap;
 typedef UNORDERED_MAP<uint32, GossipMenuItemsLocale> GossipMenuItemsLocaleMap;
 typedef UNORDERED_MAP<uint32, PointOfInterestLocale> PointOfInterestLocaleMap;
 
@@ -934,6 +941,7 @@ class ObjectMgr
         void LoadLinkedRespawn();
         bool SetCreatureLinkedRespawn(uint32 guid, uint32 linkedGuid);
         void LoadCreatureRespawnTimes();
+        void LoadCreatureCurrencyDrop();
         void LoadCreatureAddons();
         void LoadCreatureModelInfo();
         void LoadEquipmentTemplates();
@@ -1129,6 +1137,12 @@ class ObjectMgr
         {
             DarkmoonCoreStringLocaleMap::const_iterator itr = mDarkmoonCoreStringLocaleMap.find(entry);
             if (itr == mDarkmoonCoreStringLocaleMap.end()) return NULL;
+            return &itr->second;
+        }
+        CurrencyDropLocale const* GetCurrencyDropLocale(int32 currencyEntry) const
+        {
+            CurrencyDropLocaleMap::const_iterator itr = mCurrencyDropLocaleMap.find(currencyEntry);
+            if (itr == mCurrencyDropLocaleMap.end()) return NULL;
             return &itr->second;
         }
         const char *GetDarkmoonCoreString(int32 entry, LocaleConstant locale_idx) const;
@@ -1419,6 +1433,7 @@ class ObjectMgr
         NpcTextLocaleMap mNpcTextLocaleMap;
         PageTextLocaleMap mPageTextLocaleMap;
         DarkmoonCoreStringLocaleMap mDarkmoonCoreStringLocaleMap;
+        CurrencyDropLocaleMap mCurrencyDropLocaleMap;
         GossipMenuItemsLocaleMap mGossipMenuItemsLocaleMap;
         PointOfInterestLocaleMap mPointOfInterestLocaleMap;
         RespawnTimes mCreatureRespawnTimes;

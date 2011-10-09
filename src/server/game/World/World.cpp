@@ -1422,6 +1422,9 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Creature Linked Respawn...");
     sObjectMgr->LoadLinkedRespawn();                     // must be after LoadCreatures(), LoadGameObjects()
 
+    sLog->outString("DARKMOONCORE: Loading Creature Currency Drop...");         // must be after PackInstances()
+    sObjectMgr->LoadCreatureCurrencyDrop();
+
     sLog->outString("Loading Gameobject Data...");
     sObjectMgr->LoadGameobjects();
 
