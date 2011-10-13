@@ -22780,7 +22780,20 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
 
                         pGroupGuy->GiveXP(itr_xp, pVictim, group_rate);
 
-	
+                        if (Pet* pet = pGroupGuy->GetPet())
+                            pet->GivePetXP(itr_xp/2);
+                    }
+
+                    // quest objectives updated only for alive group member or dead but with not released body
+                    if (pGroupGuy->isAlive()|| !pGroupGuy->GetCorpse())
+                    {
+                        // normal creature (not pet/etc) can be only in !PvP case
+                        if (pVictim->GetTypeId() == TYPEID_UNIT)
+                            pGroupGuy->KilledMonster(pVictim->ToCreature()->GetCreatureInfo(), pVictim->GetGUID());
+                    }
+                }
+            }
+        }
 	Unit *owner = GetCharmerOrOwnerOrSelf();
     Group *partyGroup = NULL;
     if (owner->GetTypeId() == TYPEID_PLAYER)
@@ -22792,7 +22805,7 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
 
         for (GroupReference *itr = partyGroup->GetFirstMember(); itr != NULL; itr = itr->next())
         {
-            Player* Target = itr->getSource();
+            Player* PlayerTarget = itr->getSource();
 
         Creature* target = ObjectAccessor::GetCreatureOrPetOrVehicle(*m_session->GetPlayer(), m_session->GetPlayer()->GetSelection());
         uint32 Entry = target->GetEntry();
@@ -22808,24 +22821,10 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
         uint32 currencyType		= fields[1].GetUInt32();
         int32 currencyCount     = fields[2].GetUInt32();
 
-        Target->ModifyCurrency(currencyType, currencyCount * 100);
+        PlayerTarget->ModifyCurrency(currencyType, currencyCount * PLAYER_CURRENCY_PRECISION);
         }
     }
 
-                        if (Pet* pet = pGroupGuy->GetPet())
-                            pet->GivePetXP(itr_xp/2);
-                    }
-
-                    // quest objectives updated only for alive group member or dead but with not released body
-                    if (pGroupGuy->isAlive()|| !pGroupGuy->GetCorpse())
-                    {
-                        // normal creature (not pet/etc) can be only in !PvP case
-                        if (pVictim->GetTypeId() == TYPEID_UNIT)
-                            pGroupGuy->KilledMonster(pVictim->ToCreature()->GetCreatureInfo(), pVictim->GetGUID());
-                    }
-                }
-            }
-        }
     }
     else                                                    // if (!pGroup)
     {
