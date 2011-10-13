@@ -1862,7 +1862,7 @@ bool ChatHandler::HandleModifyCurrencyCommand (const char* args)
 
         target->ModifyCurrency(uint32(currencyid), amount);
 
-        PSendSysMessage(LANG_COMMAND_MODIFY_HONOR, GetNameLink(target).c_str(), target->GetCurrency(uint32(currencyid)));
+        PSendSysMessage(target->GetCurrency(uint32(currencyid)));
         return true;
 }
 

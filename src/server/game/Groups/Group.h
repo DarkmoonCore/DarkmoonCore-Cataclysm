@@ -70,6 +70,13 @@ enum GroupMemberOnlineStatus
     MEMBER_STATUS_UNK5      = 0x0080,                       // never seen
 };
 
+enum ConquestPointsSourcesDrop
+{
+    CP_SOURCE_ARENA_DROP     = 0,
+    CP_SOURCE_RATED_BG_DROP  = 1,
+    CP_SOURCE_MAX_DROP
+};
+
 enum GroupMemberFlags
 {
     MEMBER_FLAG_ASSISTANT   = 0x01,
@@ -153,6 +160,7 @@ struct InstanceGroupBind
     InstanceGroupBind() : save(NULL), perm(false) {}
 };
 
+
 /** request member stats checken **/
 /** todo: uninvite people that not accepted invite **/
 class Group
@@ -166,7 +174,23 @@ class Group
             uint8       flags;
             uint8       roles;
         };
+
+enum NPCCurrencyState
+{
+    PLAYERCURRENCY_UNCHANGED = 0,
+    PLAYERCURRENCY_CHANGED   = 1,
+    PLAYERCURRENCY_NEW       = 2,
+    PLAYERCURRENCY_REMOVED   = 3
+};
+
+struct NPCCurrencyDrop
+{
+    NPCCurrencyState state;
+    uint32 totalCount;
+    uint32 weekCount;
+};
         typedef std::list<MemberSlot> MemberSlotList;
+		typedef UNORDERED_MAP<uint32, NPCCurrencyDrop> PlayerCurrenciesMap;
         typedef MemberSlotList::const_iterator member_citerator;
 
         typedef UNORDERED_MAP< uint32 /*mapId*/, InstanceGroupBind> BoundInstancesMap;
@@ -263,6 +287,15 @@ class Group
         // -no description-
         //void SendInit(WorldSession *session);
         void SendTargetIconList(WorldSession *session);
+        uint32 _GetCurrencyTotalCap_Drop(const CurrencyTypesEntry* currency) const;
+		uint32 _GetCurrencyWeekCap_Drop(const CurrencyTypesEntry* currency) const;
+        uint16 m_conquestPointsWeekCap[CP_SOURCE_MAX_DROP];
+		WorldSession *m_session;
+        WorldSession* GetSession() const { return m_session; }
+		bool m_inWorld;
+		const bool& IsInWorld() const { return m_inWorld; }
+        PlayerCurrenciesMap m_currencies;
+        void SendCurrencyDrop(uint32 id, int32 count);
         void SendUpdate();
         void UpdatePlayerOutOfRange(Player* pPlayer);
                                                             // ignore: GUID of player that will be ignored

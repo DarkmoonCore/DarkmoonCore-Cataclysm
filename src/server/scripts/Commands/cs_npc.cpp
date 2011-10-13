@@ -84,6 +84,7 @@ public:
         static ChatCommand npcCommandTable[] =
         {
             { "info",           SEC_ADMINISTRATOR,  false, &HandleNpcInfoCommand,              "", NULL },
+            { "currencydrop",   SEC_ADMINISTRATOR,  false, &HandleNpcCurrDropCommand,          "", NULL },
             { "move",           SEC_GAMEMASTER,     false, &HandleNpcMoveCommand,              "", NULL },
             { "playemote",      SEC_ADMINISTRATOR,  false, &HandleNpcPlayEmoteCommand,         "", NULL },
             { "say",            SEC_MODERATOR,      false, &HandleNpcSayCommand,               "", NULL },
@@ -513,6 +514,37 @@ public:
         return true;
     }
 
+    static bool HandleNpcCurrDropCommand(ChatHandler* handler, const char* /*args*/)
+    {
+        Creature* target = handler->getSelectedCreature();
+
+        if (!target)
+        {
+            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SetSentErrorMessage(true);
+            return false;
+        }
+
+        uint32 Entry = target->GetEntry();
+        CreatureInfo const* cInfo = target->GetCreatureInfo();
+
+        QueryResult result = WorldDatabase.PQuery("SELECT entry, currency, count FROM creature_currency_drop WHERE entry='%u'", Entry);
+        if (!result)
+        {
+            handler->SendSysMessage(LANG_CREATURE_NO_CURRENCY_DROP);
+            handler->SetSentErrorMessage(true);
+            return false;
+        }
+
+        Field *fields = result->Fetch();
+        uint32 currencyType		= fields[1].GetUInt32();
+        int32 currencyCount     = fields[2].GetUInt32();
+
+        handler->PSendSysMessage(LANG_CREATURE_CURRENCY_DROP, currencyType, currencyCount);
+
+        return true;
+    }
+
     static bool HandleNpcInfoCommand(ChatHandler* handler, const char* /*args*/)
     {
         Creature* target = handler->getSelectedCreature();
@@ -531,7 +563,7 @@ public:
         uint32 Entry = target->GetEntry();
         CreatureInfo const* cInfo = target->GetCreatureInfo();
 
-        int64 curRespawnDelay = target->GetRespawnTimeEx()-time(NULL);
+		int64 curRespawnDelay = target->GetRespawnTimeEx()-time(NULL);
         if (curRespawnDelay < 0)
             curRespawnDelay = 0;
         std::string curRespawnDelayStr = secsToTimeString(uint64(curRespawnDelay),true);

@@ -1950,7 +1950,7 @@ void ObjectMgr::LoadCreatureCurrencyDrop()
 {
     uint32 count = 0;
 
-    QueryResult result = WorldDatabase.Query("SELECT entry, currency, count FROM creature_currency_drop");
+    QueryResult result = WorldDatabase.Query("SELECT entry, currency, count FROM creature_currency_drop WHERE entry='%d'");
 
     if (!result)
     {
@@ -1964,8 +1964,8 @@ void ObjectMgr::LoadCreatureCurrencyDrop()
         Field *fields = result->Fetch();
 
         uint32 currencyEntry	 = fields[0].GetUInt32();
-        uint64 currencyType		 = fields[1].GetUInt32();
-        uint32 currencyCount     = fields[2].GetUInt32();
+        uint32 currencyType		 = fields[1].GetUInt32();
+        int32 currencyCount     = fields[2].GetUInt32();
 
         CurrencyDropLocale& data = mCurrencyDropLocaleMap[currencyEntry];
 

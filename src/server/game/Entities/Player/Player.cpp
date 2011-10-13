@@ -22779,6 +22779,40 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
                             itr_xp = uint32(itr_xp*(1.0f + (*i)->GetAmount() / 100.0f));
 
                         pGroupGuy->GiveXP(itr_xp, pVictim, group_rate);
+
+	
+	Unit *owner = GetCharmerOrOwnerOrSelf();
+    Group *partyGroup = NULL;
+    if (owner->GetTypeId() == TYPEID_PLAYER)
+        partyGroup = owner->ToPlayer()->GetGroup();
+
+    if (partyGroup)
+    {
+        uint8 subgroup = owner->ToPlayer()->GetSubGroup();
+
+        for (GroupReference *itr = partyGroup->GetFirstMember(); itr != NULL; itr = itr->next())
+        {
+            Player* Target = itr->getSource();
+
+        Creature* target = ObjectAccessor::GetCreatureOrPetOrVehicle(*m_session->GetPlayer(), m_session->GetPlayer()->GetSelection());
+        uint32 Entry = target->GetEntry();
+
+        QueryResult result = WorldDatabase.PQuery("SELECT entry, currency, count FROM creature_currency_drop WHERE entry='%u'", Entry);
+        if (!result)
+        {
+            return false;
+        }
+
+        Field *fields = result->Fetch();
+        uint32 currencyEntry	= fields[0].GetUInt32();
+        uint32 currencyType		= fields[1].GetUInt32();
+        int32 currencyCount     = fields[2].GetUInt32();
+
+        Target->ModifyCurrency(currencyType, currencyCount);
+		ChatHandler(this).PSendSysMessage(GetCurrency(currencyType));
+        }
+    }
+
                         if (Pet* pet = pGroupGuy->GetPet())
                             pet->GivePetXP(itr_xp/2);
                     }

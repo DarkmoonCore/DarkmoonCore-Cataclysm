@@ -33,6 +33,7 @@ class GroupReference : public Reference<Group, Player>
     protected:
         uint8 iSubGroup;
         void targetObjectBuildLink();
+        void ModifyCurrency();
         void targetObjectDestroyLink();
         void sourceObjectDestroyLink();
     public:

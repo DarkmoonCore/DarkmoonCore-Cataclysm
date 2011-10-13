@@ -734,7 +734,9 @@ enum DarkmoonCoreStrings
 
     LANG_CHANNEL_CITY                   = 819,
 	LANG_ADDITEM_ITEMADDED              = 820,
-    // Room for in-game strings           821-999 not used
+	LANG_CREATURE_CURRENCY_DROP         = 821,
+	LANG_CREATURE_NO_CURRENCY_DROP		= 822,
+    // Room for in-game strings           823-999 not used
 
     // Level 4 (CLI only commands)
     LANG_COMMAND_EXIT                   = 1000,

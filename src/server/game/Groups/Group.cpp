@@ -1097,6 +1097,124 @@ void Group::GetDataForXPAtKill(Unit const* victim, uint32& count, uint32& sum_le
     }
 }
 
+uint32 Group::_GetCurrencyWeekCap_Drop(const CurrencyTypesEntry* currency) const
+{
+    uint32 cap = currency->WeekCap;
+    switch (currency->ID)
+    {
+    case CURRENCY_TYPE_CONQUEST_POINTS:
+        cap = uint32( m_conquestPointsWeekCap[CP_SOURCE_ARENA] * PLAYER_CURRENCY_PRECISION * sWorld->getRate(RATE_CONQUEST_POINTS_WEEK_LIMIT));
+        break;
+    case CURRENCY_TYPE_JUSTICE_POINTS:
+        {
+            uint32 justicecap = sWorld->getIntConfig(CONFIG_MAX_JUSTICE_POINTS) * PLAYER_CURRENCY_PRECISION;
+            if (justicecap > 0)
+                cap = justicecap;
+            break;
+        }
+    }
+
+    if (cap != currency->WeekCap && IsInWorld() && !GetSession()->PlayerLoading())
+    {
+        WorldPacket packet(SMSG_UPDATE_CURRENCY_WEEK_LIMIT, 8);
+        packet << uint32(cap / PLAYER_CURRENCY_PRECISION);
+        packet << uint32(currency->ID);
+        GetSession()->SendPacket(&packet);
+    }
+
+    return cap;
+}
+
+uint32 Group::_GetCurrencyTotalCap_Drop(const CurrencyTypesEntry* currency) const
+{
+    uint32 cap = currency->TotalCap;
+    switch (currency->ID)
+    {
+    case CURRENCY_TYPE_CONQUEST_POINTS:
+        cap = sWorld->getIntConfig(CONFIG_MAX_CONQUEST_POINTS) * PLAYER_CURRENCY_PRECISION;
+        break;
+    case CURRENCY_TYPE_HONOR_POINTS:
+        cap = sWorld->getIntConfig(CONFIG_MAX_HONOR_POINTS) * PLAYER_CURRENCY_PRECISION;
+        break;
+    case CURRENCY_TYPE_JUSTICE_POINTS:
+        cap = sWorld->getIntConfig(CONFIG_MAX_JUSTICE_POINTS) * PLAYER_CURRENCY_PRECISION;
+        break;
+    }
+
+    return cap;
+}
+
+void Group::SendCurrencyDrop(uint32 id, int32 count)
+{
+    if (!count)
+        return;
+
+    const CurrencyTypesEntry* currency = sCurrencyTypesStore.LookupEntry(id);
+    ASSERT(currency);
+
+    int32 oldTotalCount = 0;
+    int32 oldWeekCount = 0;
+    PlayerCurrenciesMap::iterator itr = m_currencies.find(id);
+    if (itr == m_currencies.end())
+    {
+        NPCCurrencyDrop cur;
+        cur.state = PLAYERCURRENCY_NEW;
+        cur.totalCount = 0;
+        cur.weekCount = 0;
+        m_currencies[id] = cur;
+        itr = m_currencies.find(id);
+    }
+    else
+    {
+        oldTotalCount = itr->second.totalCount;
+        oldWeekCount = itr->second.weekCount;
+    }
+
+    int32 newTotalCount = oldTotalCount + count;
+    if (newTotalCount < 0)
+        newTotalCount = 0;
+
+    int32 newWeekCount = oldWeekCount + (count > 0 ? count : 0);
+    if (newWeekCount < 0)
+        newWeekCount = 0;
+
+    uint32 totalCap = _GetCurrencyTotalCap_Drop(currency);
+    if (totalCap && int32(totalCap) < newTotalCount)
+    {
+        int32 delta = newTotalCount - totalCap;
+        newTotalCount = totalCap;
+        newWeekCount -= delta;
+    }
+
+    uint32 weekCap = _GetCurrencyWeekCap_Drop(currency);
+    if (weekCap && int32(weekCap) < newWeekCount)
+    {
+        int32 delta = newWeekCount - weekCap;
+        newWeekCount = weekCap;
+        newTotalCount -= delta;
+    }
+
+    if (newTotalCount != oldTotalCount)
+    {
+        if (itr->second.state != PLAYERCURRENCY_NEW)
+            itr->second.state = PLAYERCURRENCY_CHANGED;
+
+        itr->second.totalCount = newTotalCount;
+        itr->second.weekCount = newWeekCount;
+
+        // probably excessive checks
+        if (IsInWorld() && !GetSession()->PlayerLoading())
+        {
+            WorldPacket packet(SMSG_UPDATE_CURRENCY, 12);
+            packet << uint32(id);
+            packet << uint32(weekCap ? (newWeekCount / PLAYER_CURRENCY_PRECISION) : 0);
+            packet << uint32(newTotalCount / PLAYER_CURRENCY_PRECISION);
+            GetSession()->SendPacket(&packet);
+        }
+    }
+}
+
+
 void Group::SendTargetIconList(WorldSession *session)
 {
     if (!session)

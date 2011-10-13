@@ -444,6 +444,7 @@ class ChatHandler
         };
 
         typedef std::list<DeletedInfo> DeletedInfoList;
+		typedef UNORDERED_MAP<uint32, PlayerCurrency> PlayerCurrenciesMap;
         bool GetDeletedCharacterInfoList(DeletedInfoList& foundList, std::string searchString = "");
         std::string GenerateDeletedCharacterGUIDsWhereStr(DeletedInfoList::const_iterator& itr, DeletedInfoList::const_iterator const& itr_end);
         void HandleCharacterDeletedListHelper(DeletedInfoList const& foundList);
