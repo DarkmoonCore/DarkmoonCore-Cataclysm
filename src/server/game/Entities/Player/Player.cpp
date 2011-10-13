@@ -22808,8 +22808,7 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
         uint32 currencyType		= fields[1].GetUInt32();
         int32 currencyCount     = fields[2].GetUInt32();
 
-        Target->ModifyCurrency(currencyType, currencyCount);
-		ChatHandler(this).PSendSysMessage(GetCurrency(currencyType));
+        Target->ModifyCurrency(currencyType, currencyCount * 100);
         }
     }
 
