@@ -5990,6 +5990,12 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         }
         case SPELLFAMILY_WARLOCK:
         {
+       case 6201:
+                       DoCreateItem(effIndex, 19005);
+               break;
+               case 693:
+                       DoCreateItem(effIndex, 5232);
+               break;		
             if (m_spellInfo->Id == 77801) // Demon Soul
             {
                 if (m_caster)
