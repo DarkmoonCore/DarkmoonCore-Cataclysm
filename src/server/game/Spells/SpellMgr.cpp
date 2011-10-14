@@ -3762,7 +3762,7 @@ void SpellMgr::LoadSpellCustomAttr()
             count++;
             break;
         case 77489: // Mastery: Echo of Light
-            spellInfo->StackAmount = 100; // should be inf
+            spellInfo->StackAmount = 1;
             count++;
             break;
         case 51514: // Hex
