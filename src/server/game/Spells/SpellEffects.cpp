@@ -2700,6 +2700,62 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
                 break;
         }
     }
+	    // Surge of Light - Prock Chance 3 %
+    if (m_caster->HasAura(88687))
+    {
+        switch(m_spellInfo->Id)
+        {
+            // Heal
+            case 2050:
+				if (roll_chance_i(3))
+                m_caster->CastSpell(m_caster, 88688, true);
+                break;
+            // Greater Heal
+            case 2060:
+				if (roll_chance_i(3))
+                m_caster->CastSpell(m_caster, 88688, true);
+                break;
+            // Flash Heal
+            case 2061:
+				if (roll_chance_i(3))
+                m_caster->CastSpell(m_caster, 88688, true);
+                break;
+            // Smite
+            case 585:
+				if (roll_chance_i(3))
+                m_caster->CastSpell(m_caster, 88688, true);
+                break;
+
+        }
+    }
+	    // Surge of Light - Prock Chance 6 %
+    if (m_caster->HasAura(88690))
+    {
+        switch(m_spellInfo->Id)
+        {
+            // Heal
+            case 2050:
+				if (roll_chance_i(6))
+                m_caster->CastSpell(m_caster, 88688, true);
+                break;
+            // Greater Heal
+            case 2060:
+				if (roll_chance_i(6))
+                m_caster->CastSpell(m_caster, 88688, true);
+                break;
+            // Flash Heal
+            case 2061:
+				if (roll_chance_i(6))
+                m_caster->CastSpell(m_caster, 88688, true);
+                break;
+            // Smite
+            case 585:
+				if (roll_chance_i(6))
+                m_caster->CastSpell(m_caster, 88688, true);
+                break;
+
+        }
+    }
 }
 
 void Spell::SpellDamageHeal(SpellEffIndex effIndex)

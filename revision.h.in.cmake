@@ -7,5 +7,5 @@
  #define VER_FILEVERSION            0,0,0
  #define VER_FILEVERSION_STR        "@rev_date@ (@rev_hash@)"
  #define VER_PRODUCTVERSION         VER_FILEVERSION
- #define VER_PRODUCTVERSION_STR     "24"
+ #define VER_PRODUCTVERSION_STR     "25"
 #endif // __REVISION_H__
