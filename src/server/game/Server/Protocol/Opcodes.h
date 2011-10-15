@@ -1200,7 +1200,7 @@ enum Opcodes
     CMSG_CHECK_LOGIN_CRITERIA                        = 0x101F8, //
     SMSG_SERVER_BUCK_DATA_START                      = 0x101F9, //
     CMSG_QUERY_VEHICLE_STATUS                        = 0x101F0, // 69A0 ????
-    SMSG_BATTLEGROUND_INFO_THROTTLED                 = 0x075C4, // 4.0.6a 13623
+    SMSG_BATTLEGROUND_INFO_THROTTLED                 = 0x004A6, // 4.0.6a 13623
     SMSG_PLAYER_VEHICLE_DATA                         = 0x0A5A4, // 4.0.6a 13623
     CMSG_PLAYER_VEHICLE_ENTER                        = 0x0AEC8, // 4.0.6a 13623
     CMSG_EJECT_PASSENGER                             = 0x0F688, // 4.0.6a 13623
@@ -1213,8 +1213,8 @@ enum Opcodes
     CMSG_CORPSE_MAP_POSITION_QUERY                   = 0x023CC, // 4.0.6a 13623
     SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE          = 0x1020A, //
     CMSG_LFG_SET_ROLES_2                             = 0x1020B, //
-    CMSG_CALENDAR_CONTEXT_EVENT_SIGNUP               = 0x0AEAC, // 4.0.6a 13623
-    SMSG_CALENDAR_ACTION_PENDING                     = 0x07E8C, // 4.0.6a 13623
+    CMSG_CALENDAR_CONTEXT_EVENT_SIGNUP               = 0x0DC74, // 4.0.6a 13623
+    SMSG_CALENDAR_ACTION_PENDING                     = 0x0265E, // 4.0.6a 13623
     SMSG_EQUIPMENT_SET_LIST                          = 0x0F1A8, // 4.0.6a 13623
     CMSG_EQUIPMENT_SET_SAVE                          = 0x0BFC0, // 4.0.6a 13623
     CMSG_UPDATE_PROJECTILE_POSITION                  = 0x0EF7F, //
