@@ -2674,7 +2674,7 @@ void Spell::EffectPowerBurn(SpellEffIndex effIndex)
 void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
 {
     // Chakra Talent
-    if (m_caster->HasAura(14571))
+    if (m_caster->HasAura(14751))
     {
         switch(m_spellInfo->Id)
         {
