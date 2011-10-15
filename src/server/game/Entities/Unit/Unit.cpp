@@ -2003,7 +2003,7 @@ void Unit::AttackerStateUpdate (Unit *pVictim, WeaponAttackType attType, bool ex
         return;                                             // ignore ranged case
 
     // melee attack spell casted at main hand attack only - no normal melee dmg dealt
-    if (attType == BASE_ATTACK && m_currentSpells[CURRENT_MELEE_SPELL] && !extra)
+    if (attType == BASE_ATTACK && m_currentSpells[CURRENT_MELEE_SPELL])
         m_currentSpells[CURRENT_MELEE_SPELL]->cast();
     else
     {
@@ -2026,16 +2026,16 @@ void Unit::AttackerStateUpdate (Unit *pVictim, WeaponAttackType attType, bool ex
             sLog->outStaticDebug("AttackerStateUpdate: (NPC)    %u attacked %u (TypeId: %u) for %u dmg, absorbed %u, blocked %u, resisted %u.",
                 GetGUIDLow(), pVictim->GetGUIDLow(), pVictim->GetTypeId(), damageInfo.damage, damageInfo.absorb, damageInfo.blocked_amount, damageInfo.resist);
     }
-};
-void Unit::HandleProcExtraAttackFor(Unit* victim)
+if (!extra && m_extraAttacks)
 {
-	while (m_extraAttacks)
+	while(m_extraAttacks)
     {
-	AttackerStateUpdate(victim, BASE_ATTACK, true);
-	--m_extraAttacks;
+	AttackerStateUpdate(pVictim, BASE_ATTACK, true);
+	if (m_extraAttacks > 0)
+		--m_extraAttacks;
     }
 }
-
+}
 MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(const Unit *pVictim, WeaponAttackType attType) const
 {
     // This is only wrapper
@@ -11009,13 +11009,6 @@ bool Unit::isSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolM
                 // Custom crit by class
                 switch (spellProto->SpellFamilyName)
                 {
-					case SPELLFAMILY_MAGE:
-						// Glyph of Fire Blast
-						if ((spellProto->SpellFamilyFlags[0] & 0x2) == 0x2 && spellProto->SpellIconID == 12)
-							if (victim->HasAuraWithMechanic((1<<MECHANIC_STUN) | (1<<MECHANIC_KNOCKOUT))
-								if (AuraEffect const* aurEff = GetAuraEffect(56369, EFFECT_0))
-									crit_chance += aurEff->GetAmount();
-						break;				
                     case SPELLFAMILY_DRUID:
                         // Improved Faerie Fire
                         if (pVictim->HasAuraState(AURA_STATE_FAERIE_FIRE))
