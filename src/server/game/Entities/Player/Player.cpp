@@ -22731,6 +22731,38 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
         uint32 sum_level = 0;
         Player* member_with_max_level = NULL;
         Player* not_gray_member_with_max_level = NULL;
+		Unit *owner = GetCharmerOrOwnerOrSelf();
+		Group *partyGroup = NULL;
+		if (owner->GetTypeId() == TYPEID_PLAYER)
+		partyGroup = owner->ToPlayer()->GetGroup();
+
+
+
+    if (!PvP)
+    {
+        uint8 subgroup = owner->ToPlayer()->GetSubGroup();
+
+        for (GroupReference *itr = partyGroup->GetFirstMember(); itr != NULL; itr = itr->next())
+        {
+            Player* PlayerTarget = itr->getSource();
+
+        Creature* target = ObjectAccessor::GetCreatureOrPetOrVehicle(*m_session->GetPlayer(), m_session->GetPlayer()->GetSelection());
+        uint32 Entry = target->GetEntry();
+
+        QueryResult result = WorldDatabase.PQuery("SELECT entry, currency, count FROM creature_currency_drop WHERE entry='%u'", Entry);
+        if (!result)
+        {
+            return false;
+        }
+
+        Field *fields = result->Fetch();
+        uint32 currencyEntry	= fields[0].GetUInt32();
+        uint32 currencyType		= fields[1].GetUInt32();
+        int32 currencyCount     = fields[2].GetUInt32();
+
+        PlayerTarget->ModifyCurrency(currencyType, currencyCount * PLAYER_CURRENCY_PRECISION);
+        }
+    }
 
         pGroup->GetDataForXPAtKill(pVictim, count, sum_level, member_with_max_level, not_gray_member_with_max_level);
 
@@ -22794,37 +22826,6 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
                 }
             }
         }
-	Unit *owner = GetCharmerOrOwnerOrSelf();
-    Group *partyGroup = NULL;
-    if (owner->GetTypeId() == TYPEID_PLAYER)
-        partyGroup = owner->ToPlayer()->GetGroup();
-
-    if (partyGroup)
-    {
-        uint8 subgroup = owner->ToPlayer()->GetSubGroup();
-
-        for (GroupReference *itr = partyGroup->GetFirstMember(); itr != NULL; itr = itr->next())
-        {
-            Player* PlayerTarget = itr->getSource();
-
-        Creature* target = ObjectAccessor::GetCreatureOrPetOrVehicle(*m_session->GetPlayer(), m_session->GetPlayer()->GetSelection());
-        uint32 Entry = target->GetEntry();
-
-        QueryResult result = WorldDatabase.PQuery("SELECT entry, currency, count FROM creature_currency_drop WHERE entry='%u'", Entry);
-        if (!result)
-        {
-            return false;
-        }
-
-        Field *fields = result->Fetch();
-        uint32 currencyEntry	= fields[0].GetUInt32();
-        uint32 currencyType		= fields[1].GetUInt32();
-        int32 currencyCount     = fields[2].GetUInt32();
-
-        PlayerTarget->ModifyCurrency(currencyType, currencyCount * PLAYER_CURRENCY_PRECISION);
-        }
-    }
-
     }
     else                                                    // if (!pGroup)
     {
