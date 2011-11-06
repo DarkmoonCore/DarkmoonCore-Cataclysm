@@ -5904,13 +5904,13 @@ void AuraEffect::HandleModDamagePercentDone(AuraApplication const *aurApp, uint8
         switch (GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER))
         {
             case 0: // 1HP
-                GetBase()->SetDuration(4000);
+                GetBase()->SetDuration(4000, true);
                 break;
             case 1: // 2HP
-                GetBase()->SetDuration(8000);
+                GetBase()->SetDuration(8000, true);
                 break;
             case 2: // 3HP
-                GetBase()->SetDuration(12000);
+                GetBase()->SetDuration(12000, true);
                 break;
         }
     target->SetPower(POWER_HOLY_POWER, 0);
@@ -6078,6 +6078,13 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode, bool
                     if (caster)
                         caster->CastSpell(caster, 13138, true, NULL, this);
                     break;
+                    // Sudden Death Cataclysm Proc
+                case 52437:
+                {
+                    if (caster && caster->ToPlayer()->HasSpellCooldown(86346))
+                        caster->ToPlayer()->RemoveSpellCooldown(86346,true);
+                   break;
+                }
                 case 34026:   // kill command
                 {
                     Unit *pet = target->GetGuardianPet();
@@ -6123,10 +6130,10 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode, bool
                 }
 				case 33763:
 				if (target->HasAura(92363, GetCasterGUID())) // Get talent Malfurion's gift rank 1
-				if (roll_chance_i(2)) // Procs only 2% of the time
+				if (roll_chance_i(50)) // Procs only 2% of the time
 				target->CastSpell(caster, 16870, true, NULL, this); // Clearcasting
 				if (target->HasAura(92364, GetCasterGUID())) // Get talent Malfurion's gift rank 2
-				if (roll_chance_i(4)) // Procs only 4% of the time
+				if (roll_chance_i(100)) // Procs only 4% of the time
 				target->CastSpell(caster, 16870, true, NULL, this); // Clearcasting
 				break;				
                 case 39850:                                     // Rocket Blast
